@@ -6,7 +6,8 @@ from loader import loader
 from net import net
 import torch.utils.data as data_utils
 
-cla = 3
+cla = 1
+first = 1
 critetion = nn.BCELoss()
 def train(model,epoch):
     optimizer = optim.SGD(model.parameters(), lr=0.0001, momentum = 0.9,weight_decay=0.0005)
@@ -39,7 +40,7 @@ def test(model):
     print('Accuracy on testt set: %d %%'  %  (100 * correct / (2530 * 7)))
 
 if __name__=='__main__':
-    model = net()
-    for epoch in range(20):
+    model = net(first)
+    for epoch in range(10):
         train(model,epoch)
         test(model)

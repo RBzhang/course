@@ -4,11 +4,12 @@ import random
 import torch.utils.data as data_utils
 import torch
 import matplotlib.pyplot as plt
+import scipy.io as io
 import seaborn
 import pandas as pd
 class loader(data_utils.Dataset):
     def __init__(self,filename,train, cla) -> None:
-        file = os.path.dirname(os.path.dirname(__file__))
+        file = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         print(file)
         file = file + '/data/'+filename
         x_data = []
@@ -18,7 +19,9 @@ class loader(data_utils.Dataset):
         S = []
         for i in range(1,8):
             filepath = file + '/' + str(i) + '.npy'
+            filemat = file + '/' + str(i) + '.mat'
             data = np.load(filepath)
+            io.savemat(filemat,{'data':data})
             if cla == 1:
                 data = data[:,0,:]
             elif cla == 2:
@@ -45,7 +48,7 @@ class loader(data_utils.Dataset):
 
         # print(Sb)
         # print(x_data.shape)
-        x_data = (x_data - x_data.min(0)) / (x_data.max(0) - x_data.min(0))
+        # x_data = (x_data - x_data.min(0)) / (x_data.max(0) - x_data.min(0))
         t = np.split(x_data, 7, axis=0)
         for x in range(7):
             S.append(np.dot((t[x] - mean_d[x]).transpose(), (t[x] - mean_d[x])) / t[x].shape[0])
@@ -66,11 +69,6 @@ class loader(data_utils.Dataset):
         # x_data = np.dot(W, np.array(x_data).transpose()).transpose()
         x_data = np.array(x_data)
         y_data = np.array(y_data)
-        # fig = plt.figure()
-        # t = pd.DataFrame(x_data)
-        # plt.subplot2grid((2, 3), (0, 0))
-        # t[0].value_counts().plot(kind='bar')
-        # plt.show()
         self.x_data = torch.from_numpy(x_data)
         self.y_data = torch.from_numpy(y_data)
         # print(self.x_data.shape)
@@ -80,5 +78,5 @@ class loader(data_utils.Dataset):
     def __getitem__(self, index):
         return self.x_data[index], self.y_data[index]
 if __name__ == "__main__":
-    t = loader('test',False,3)
+    t = loader('train',True,3)
 

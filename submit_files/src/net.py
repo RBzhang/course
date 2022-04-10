@@ -3,9 +3,14 @@ import torch
 import torch.utils.data as data_utils
 import torch.nn as nn
 class net(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, T):
         super(net, self).__init__()
-        self.layer1 = nn.Sequential(nn.Linear(10, 16), nn.ReLU())
+        first = 0
+        if T == 1:
+            first = 5
+        else:
+            first =  10
+        self.layer1 = nn.Sequential(nn.Linear(first, 16), nn.ReLU())
         self.layer2 = nn.Sequential(nn.Linear(16, 16), nn.ReLU())
         self.layer3 = nn.Sequential(nn.Linear(16, 7),nn.Sigmoid())
 
