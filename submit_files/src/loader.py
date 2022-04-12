@@ -28,6 +28,7 @@ class loader(data_utils.Dataset):
                 data = data[:,1,:]
             else:
                 data = np.hstack((data[:,0,:], data[:,1,:]))
+                # data = data[:,0,:] * data[:,1,:]
             label = np.zeros((data.shape[0], 7), dtype=np.float32)
             mean_d.append(np.mean(data,axis=(0)))
             # count = np.dot((data- np.mean(data,axis=(0))).transpose() , (data- np.mean(data,axis=(0)))) / (data.shape[0])
@@ -77,6 +78,25 @@ class loader(data_utils.Dataset):
         return self.x_data.shape[0]
     def __getitem__(self, index):
         return self.x_data[index], self.y_data[index]
+class loader_e(data_utils.Dataset):
+    def __init__(self,cla) -> None:
+        file = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        filepath = file + '/exam/' + 'exam.npy'
+        data = np.load(filepath)
+        if cla == 1:
+            data = data[:,0,:]
+        elif cla == 2:
+            data = data[:,1,:]
+        else:
+            data = np.hstack((data[:,0,:], data[:,1,:]))
+        self.x_data = torch.from_numpy(data)
+        self.y_data = torch.ones(self.x_data.shape[0],dtype=torch.float32)
+        print(self.x_data.shape)
+    def __len__(self):
+        return self.x_data.shape[0]
+    def __getitem__(self, index) :
+        return self.x_data[index], self.y_data[index]
 if __name__ == "__main__":
     t = loader('train',True,3)
+    x = loader_e(3)
 

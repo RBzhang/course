@@ -21,4 +21,11 @@ class net(torch.nn.Module):
         x = self.layer3(x)
 
         return x
-    
+if __name__ == '__main__':
+    x = torch.ones(5,dtype=torch.float32)
+    y = torch.ones(6,dtype=torch.float32)
+    tt = [x,y]
+    ee = []
+    ee.append(torch.cat(tt,dim=0))
+    ee.append(torch.cat(tt,dim=0))
+    print(torch.stack(ee,dim=1))
